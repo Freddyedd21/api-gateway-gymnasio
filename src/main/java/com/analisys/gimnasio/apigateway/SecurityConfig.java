@@ -46,7 +46,8 @@ public class SecurityConfig {
 								"/clases/api-docs/**",
 								"/trainers/api-docs/**")
 						.permitAll()
-
+					// Ruta de agregación (resumen de miembro)
+					.requestMatchers("/api/resumen/**").hasAnyRole("ADMIN", "MEMBER")
 						// Reglas de autorización por “dominio” (prefijos del gateway)
 						.requestMatchers("/miembros/**").hasAnyRole("ADMIN", "MEMBER")
 						.requestMatchers("/trainers/**").hasAnyRole("ADMIN", "TRAINER")
