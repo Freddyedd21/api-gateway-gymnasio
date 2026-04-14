@@ -71,12 +71,12 @@ public class AggregationService {
         // 1. Obtener datos del miembro (obligatorio)
         MiembroDTO miembro = fetchMiembro(miembroId, authHeader);
 
-        // 2. Lanzar llamadas en paralelo para clases, equipos y entrenador
+        // 2. Lanzar llamadas en paralelo para clases del miembro, equipos del miembro y entrenador
         CompletableFuture<List<ClaseDTO>> clasesFuture = CompletableFuture
-                .supplyAsync(() -> fetchClases(authHeader), executor);
+                .supplyAsync(() -> fetchClasesMiembro(miembroId, authHeader), executor);
 
         CompletableFuture<List<EquipmentDTO>> equiposFuture = CompletableFuture
-                .supplyAsync(() -> fetchEquiposDisponibles(authHeader), executor);
+                .supplyAsync(() -> fetchEquiposMiembro(miembroId, authHeader), executor);
 
         CompletableFuture<EntrenadorDTO> entrenadorFuture = CompletableFuture
                 .supplyAsync(() -> fetchEntrenador(miembro.entrenadorPersonalId(), authHeader), executor);
@@ -132,32 +132,32 @@ public class AggregationService {
         }
     }
 
-    private List<ClaseDTO> fetchClases(String authHeader) {
+    private List<ClaseDTO> fetchClasesMiembro(Long miembroId, String authHeader) {
         try {
-            log.info("Consultando clases en clases-service");
+            log.info("Consultando clases del miembro {} en clases-service", miembroId);
             List<ClaseDTO> result = restClient.get()
-                    .uri(clasesUrl + "/gym/clases/obtener")
+                    .uri(clasesUrl + "/gym/clases/inscripciones/miembro/{miembroId}", miembroId)
                     .header(HttpHeaders.AUTHORIZATION, authHeader)
                     .retrieve()
                     .body(new ParameterizedTypeReference<>() {});
             return result != null ? result : Collections.emptyList();
         } catch (Exception e) {
-            log.warn("No se pudo obtener clases: {}", e.getMessage());
+            log.warn("No se pudo obtener clases del miembro {}: {}", miembroId, e.getMessage());
             return Collections.emptyList();
         }
     }
 
-    private List<EquipmentDTO> fetchEquiposDisponibles(String authHeader) {
+    private List<EquipmentDTO> fetchEquiposMiembro(Long miembroId, String authHeader) {
         try {
-            log.info("Consultando equipos disponibles en equipment-service");
+            log.info("Consultando equipos del miembro {} en equipment-service", miembroId);
             List<EquipmentDTO> result = restClient.get()
-                    .uri(equipmentUrl + "/api/equipment/available")
+                    .uri(equipmentUrl + "/api/equipment/miembro/{miembroId}", miembroId)
                     .header(HttpHeaders.AUTHORIZATION, authHeader)
                     .retrieve()
                     .body(new ParameterizedTypeReference<>() {});
             return result != null ? result : Collections.emptyList();
         } catch (Exception e) {
-            log.warn("No se pudo obtener equipos: {}", e.getMessage());
+            log.warn("No se pudo obtener equipos del miembro {}: {}", miembroId, e.getMessage());
             return Collections.emptyList();
         }
     }
