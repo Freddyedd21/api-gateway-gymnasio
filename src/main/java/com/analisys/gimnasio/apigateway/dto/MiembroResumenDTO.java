@@ -9,21 +9,21 @@ import java.util.List;
  * Datos obtenidos de:
  * - miembros-service  → información personal del miembro
  * - trainer-service   → datos del entrenador personal asignado
- * - clases-service    → clases disponibles en el gimnasio
- * - equipment-service → equipos disponibles para usar
+ * - clases-service    → clases en las que está inscrito el miembro
+ * - equipment-service → equipos que el miembro está usando
  */
 public record MiembroResumenDTO(
     MiembroDTO miembro,
     EntrenadorDTO entrenadorPersonal,
-    List<ClaseDTO> clasesDisponibles,
-    List<EquipmentDTO> equiposDisponibles,
+    List<ClaseDTO> clasesInscritas,
+    List<EquipmentDTO> equiposEnUso,
     EstadisticasGimnasio estadisticas
 ) {
 
     public record EstadisticasGimnasio(
-        int totalClasesDisponibles,
-        int totalEquiposDisponibles,
-        int plazasLibresTotales,
+        int totalClasesInscritas,
+        int totalEquiposEnUso,
+        int plazasLibresEnClases,
         boolean tieneEntrenadorAsignado
     ) {}
 }
