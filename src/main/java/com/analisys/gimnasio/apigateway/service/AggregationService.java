@@ -47,10 +47,10 @@ public class AggregationService {
 
     public AggregationService(
             RestClient.Builder restClientBuilder,
-            @Value("${gateway.services.miembros:http://localhost:8080}") String miembrosUrl,
-            @Value("${gateway.services.equipment:http://localhost:8081}") String equipmentUrl,
-            @Value("${gateway.services.clases:http://localhost:8082}") String clasesUrl,
-            @Value("${gateway.services.trainers:http://localhost:8085}") String trainersUrl) {
+            @Value("${gateway.services.miembros:http://miembros-service}") String miembrosUrl,
+            @Value("${gateway.services.equipment:http://gym-equipment-service}") String equipmentUrl,
+            @Value("${gateway.services.clases:http://clases-service}") String clasesUrl,
+            @Value("${gateway.services.trainers:http://trainer-service}") String trainersUrl) {
         this.restClient = restClientBuilder.build();
         this.miembrosUrl = miembrosUrl;
         this.equipmentUrl = equipmentUrl;
